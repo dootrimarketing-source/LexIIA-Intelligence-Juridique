@@ -1,0 +1,6 @@
+{
+  "name": "LexIIA — Intelligence Juridique Collaborative",
+  "description": "Plateforme d'intelligence artificielle juridique collaborative pour cabinets d'avocats : tri automatisé des pièces, chronologie prédictive et rédaction stratégique.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

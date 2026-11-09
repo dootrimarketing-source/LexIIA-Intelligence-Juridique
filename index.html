@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="fr" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LexIIA | L'Intelligence Juridique Collaborative pour Cabinets d'Exception</title>
+    <meta name="description" content="Tri automatisé de centaines de pièces, chronologie instantanée des événements et élaboration stratégique de vos notes de synthèse." />
+    <meta property="og:title" content="LexIIA | L'Intelligence Juridique Collaborative pour Cabinets d'Exception" />
+    <meta property="og:description" content="Tri automatisé de centaines de pièces, chronologie instantanée des événements et élaboration stratégique de vos notes de synthèse." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Extension Compatibility Shim for window.fetch assignment -->
+    <script>
+      (function() {
+        try {
+          var originalFetch = window.fetch;
+          Object.defineProperty(window, 'fetch', {
+            get: function() {
+              return originalFetch;
+            },
+            set: function(val) {
+              originalFetch = val;
+            },
+            configurable: true,
+            enumerable: true
+          });
+        } catch (_) {
+          try {
+            var protoFetch = Window.prototype.fetch;
+            Object.defineProperty(Window.prototype, 'fetch', {
+              get: function() {
+                return protoFetch;
+              },
+              set: function(val) {
+                protoFetch = val;
+              },
+              configurable: true,
+              enumerable: true
+            });
+          } catch (__) {}
+        }
+
+        // Suppress external extension errors (frame_ant / Chrome extensions)
+        window.addEventListener('error', function(e) {
+          if (
+            (e.filename && e.filename.indexOf('chrome-extension://') !== -1) ||
+            (e.message && (
+              e.message.indexOf('fetch of #<Window>') !== -1 ||
+              e.message.indexOf('Cannot set property fetch') !== -1
+            ))
+          ) {
+            e.stopImmediatePropagation();
+            e.preventDefault();
+            return true;
+          }
+        }, true);
+      })();
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  </head>
+  <body class="bg-white text-slate-900 antialiased selection:bg-emerald-500 selection:text-white">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+
