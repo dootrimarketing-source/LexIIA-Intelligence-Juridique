@@ -94,6 +94,15 @@ export default function App() {
   const [activeWorkflowTab, setActiveWorkflowTab] = useState<string>('tri');
   const [showVideoModal, setShowVideoModal] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 400);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Google Sheets integration state
   const [googleUser, setGoogleUser] = useState<User | null>(null);
@@ -239,15 +248,23 @@ export default function App() {
   return (
     <div className="min-h-screen bg-white text-slate-900 antialiased selection:bg-emerald-500 selection:text-white">
       {/* =====================================================================
-          BANDEAU D'ANNONCE SUPÉRIEUR (Lumineux & Vert Émeraude doux)
+          1. COUVERTURE VIDÉO PLEIN ÉCRAN (Match 1:1 avec le screenshot)
       ===================================================================== */}
-      <div className="bg-emerald-50/90 border-b border-emerald-200/80 py-2 px-4 text-center text-xs sm:text-sm text-emerald-900 font-medium flex items-center justify-center gap-2 flex-wrap">
+      <HeroVideoStage
+        demoUrl={DEMO_URL}
+        onOpenInteractiveModal={() => setShowVideoModal(true)}
+      />
+
+      {/* =====================================================================
+          BANDEAU DE TRANSITION (Souveraineté & Pièces volumineuses)
+      ===================================================================== */}
+      <div className="bg-emerald-50/90 border-b border-emerald-200/80 py-2.5 px-4 text-center text-xs sm:text-sm text-emerald-950 font-medium flex items-center justify-center gap-2 flex-wrap">
         <span>
           Espace de travail souverain pour cabinets d’avocats · Traitement confidentiel des pièces volumineuses &amp; chronologie probatoire certifiée.
         </span>
         <a
           href={DEMO_URL}
-          className="underline text-emerald-700 hover:text-emerald-950 font-semibold inline-flex items-center gap-1 whitespace-nowrap"
+          className="underline text-emerald-700 hover:text-emerald-950 font-bold inline-flex items-center gap-1 whitespace-nowrap"
         >
           <span>Tester la démo en direct</span>
           <ArrowRight className="w-3.5 h-3.5" />
@@ -255,146 +272,140 @@ export default function App() {
       </div>
 
       {/* =====================================================================
-          NAVIGATION PRINCIPALE (Blanc Laitonné & Épuré)
+          NAVIGATION FLOTTANTE DÉROULANTE (Apparaît au scroll sous le héros plein écran)
       ===================================================================== */}
-      <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between gap-4 sm:gap-8">
-          {/* Zone 1: Brand Wordmark */}
-          <a
-            href="#"
-            className="flex items-center group transition-opacity hover:opacity-90 shrink-0 py-1"
-            aria-label="Accueil LexIIA"
-          >
-            <img
-              src="/assets/aistudio/Logo_LexIIA_2_4503cc56.png"
-              alt="Logo LexIIA"
-              className="h-8 sm:h-10 w-auto object-contain bg-transparent mix-blend-multiply"
-            />
-          </a>
-
-          {/* Zone 2: Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center gap-6 lg:gap-8 text-sm text-slate-600 font-medium">
+      {isScrolled && (
+        <header className="fixed top-0 inset-x-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-md animate-in slide-in-from-top-4 duration-300">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between gap-4 sm:gap-8">
+            {/* Zone 1: Brand Wordmark */}
             <a
-              href="#fonctionnalites"
-              className="hover:text-slate-900 hover:underline underline-offset-4 transition whitespace-nowrap shrink-0"
+              href="#"
+              className="flex items-center group transition-opacity hover:opacity-90 shrink-0 py-1"
+              aria-label="Accueil LexIIA"
             >
-              Fonctionnalités
-            </a>
-            <a
-              href="#workflow"
-              className="hover:text-slate-900 hover:underline underline-offset-4 transition whitespace-nowrap shrink-0"
-            >
-              Méthodologie
-            </a>
-            <a
-              href="#securite"
-              className="hover:text-slate-900 hover:underline underline-offset-4 transition whitespace-nowrap shrink-0"
-            >
-              Sécurité &amp; Secret
-            </a>
-            <a
-              href="#temoignages"
-              className="hover:text-slate-900 hover:underline underline-offset-4 transition whitespace-nowrap shrink-0"
-            >
-              Cas d&apos;usage
-            </a>
-            <a
-              href="#contact"
-              className="hover:text-slate-900 hover:underline underline-offset-4 transition whitespace-nowrap shrink-0"
-            >
-              Contact
-            </a>
-          </nav>
-
-          {/* Zone 3: Action Buttons & Mobile Hamburger Button */}
-          <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
-            <a
-              href={DEMO_URL}
-              className="hidden sm:inline-flex px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold bg-[#10b981] text-slate-950 hover:bg-[#059669] hover:text-white shadow-md shadow-emerald-500/25 transition-all whitespace-nowrap shrink-0"
-            >
-              Réserver une démo
+              <img
+                src="/assets/aistudio/Logo_LexIIA_2_4503cc56.png"
+                alt="Logo LexIIA"
+                className="h-8 sm:h-10 w-auto object-contain bg-transparent mix-blend-multiply"
+              />
             </a>
 
-            {/* Mobile Hamburger Button */}
-            <button
-              type="button"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 hover:text-slate-950 transition cursor-pointer"
-              aria-label="Ouvrir le menu"
-            >
-              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile Navigation Drawer */}
-        {mobileMenuOpen && (
-          <div className="md:hidden border-t border-slate-200 bg-white/98 backdrop-blur-xl px-5 py-5 space-y-4 shadow-xl animate-in slide-in-from-top-2 duration-200">
-            <nav className="flex flex-col space-y-3 text-sm font-medium text-slate-700">
+            {/* Zone 2: Desktop Navigation Links */}
+            <nav className="hidden md:flex items-center gap-6 lg:gap-8 text-sm text-slate-700 font-medium">
               <a
                 href="#fonctionnalites"
-                onClick={() => setMobileMenuOpen(false)}
-                className="py-2 px-3 rounded-lg hover:bg-slate-50 hover:text-emerald-600 transition"
+                className="hover:text-slate-950 hover:underline underline-offset-4 transition whitespace-nowrap shrink-0"
               >
-                Fonctionnalités
+                Produit
               </a>
               <a
                 href="#workflow"
-                onClick={() => setMobileMenuOpen(false)}
-                className="py-2 px-3 rounded-lg hover:bg-slate-50 hover:text-emerald-600 transition"
+                className="hover:text-slate-950 hover:underline underline-offset-4 transition whitespace-nowrap shrink-0"
               >
-                Méthodologie
+                Solutions
               </a>
               <a
                 href="#securite"
-                onClick={() => setMobileMenuOpen(false)}
-                className="py-2 px-3 rounded-lg hover:bg-slate-50 hover:text-emerald-600 transition"
+                className="hover:text-slate-950 hover:underline underline-offset-4 transition whitespace-nowrap shrink-0"
               >
-                Sécurité &amp; Secret
+                Sécurité
               </a>
               <a
                 href="#temoignages"
-                onClick={() => setMobileMenuOpen(false)}
-                className="py-2 px-3 rounded-lg hover:bg-slate-50 hover:text-emerald-600 transition"
+                className="hover:text-slate-950 hover:underline underline-offset-4 transition whitespace-nowrap shrink-0"
               >
-                Cas d&apos;usage
+                Clients
               </a>
               <a
                 href="#contact"
-                onClick={() => setMobileMenuOpen(false)}
-                className="py-2 px-3 rounded-lg hover:bg-slate-50 hover:text-emerald-600 transition"
+                className="hover:text-slate-950 hover:underline underline-offset-4 transition whitespace-nowrap shrink-0"
               >
-                Contact &amp; RDV
+                Entreprise
               </a>
             </nav>
 
-            <div className="pt-3 border-t border-slate-200 flex flex-col gap-2.5">
+            {/* Zone 3: Action Buttons & Mobile Hamburger Button */}
+            <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
               <a
                 href={DEMO_URL}
-                onClick={() => setMobileMenuOpen(false)}
-                className="w-full text-center py-3 rounded-full text-sm font-bold bg-[#10b981] text-slate-950 hover:bg-[#059669] hover:text-white transition shadow-md shadow-emerald-500/25"
+                className="hidden sm:inline-flex px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold bg-[#059669] hover:bg-[#10b981] text-white shadow-md shadow-emerald-500/25 transition-all whitespace-nowrap shrink-0"
               >
-                Tester la Démo en Direct
+                Réserver une démo
               </a>
-              <a
-                href="#contact"
-                onClick={() => setMobileMenuOpen(false)}
-                className="w-full text-center py-2.5 rounded-full text-sm font-bold bg-emerald-50 border border-emerald-300 text-emerald-950 hover:bg-emerald-100 transition"
+
+              {/* Mobile Hamburger Button */}
+              <button
+                type="button"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="md:hidden p-2 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 hover:text-slate-950 transition cursor-pointer"
+                aria-label="Ouvrir le menu"
               >
-                Réserver un Rendez-vous
-              </a>
+                {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              </button>
             </div>
           </div>
-        )}
-      </header>
 
-      {/* =====================================================================
-          SECTION HÉROS AVEC SCÈNE VIDÉO PLEIN IMPACT SUR FOND BLANC
-      ===================================================================== */}
-      <HeroVideoStage
-        demoUrl={DEMO_URL}
-        onOpenInteractiveModal={() => setShowVideoModal(true)}
-      />
+          {/* Mobile Navigation Drawer */}
+          {mobileMenuOpen && (
+            <div className="md:hidden border-t border-slate-200 bg-white/98 backdrop-blur-xl px-5 py-5 space-y-4 shadow-xl animate-in slide-in-from-top-2 duration-200">
+              <nav className="flex flex-col space-y-3 text-sm font-medium text-slate-700">
+                <a
+                  href="#fonctionnalites"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="py-2 px-3 rounded-lg hover:bg-slate-50 hover:text-emerald-600 transition"
+                >
+                  Produit
+                </a>
+                <a
+                  href="#workflow"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="py-2 px-3 rounded-lg hover:bg-slate-50 hover:text-emerald-600 transition"
+                >
+                  Solutions
+                </a>
+                <a
+                  href="#securite"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="py-2 px-3 rounded-lg hover:bg-slate-50 hover:text-emerald-600 transition"
+                >
+                  Sécurité &amp; Secret
+                </a>
+                <a
+                  href="#temoignages"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="py-2 px-3 rounded-lg hover:bg-slate-50 hover:text-emerald-600 transition"
+                >
+                  Clients
+                </a>
+                <a
+                  href="#contact"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="py-2 px-3 rounded-lg hover:bg-slate-50 hover:text-emerald-600 transition"
+                >
+                  Entreprise &amp; Contact
+                </a>
+              </nav>
+
+              <div className="pt-3 border-t border-slate-200 flex flex-col gap-2.5">
+                <a
+                  href={DEMO_URL}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full text-center py-3 rounded-full text-sm font-bold bg-[#059669] hover:bg-[#10b981] text-white transition shadow-md shadow-emerald-500/25"
+                >
+                  Tester la Démo en Direct
+                </a>
+                <a
+                  href="#contact"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full text-center py-2.5 rounded-full text-sm font-bold bg-emerald-50 border border-emerald-300 text-emerald-950 hover:bg-emerald-100 transition"
+                >
+                  Réserver un Rendez-vous
+                </a>
+              </div>
+            </div>
+          )}
+        </header>
+      )}
 
       {/* =====================================================================
           RÉFÉRENCEMENT GEO & PREUVES DE CONFIANCE (Plusieurs cabinets nous font confiance)
