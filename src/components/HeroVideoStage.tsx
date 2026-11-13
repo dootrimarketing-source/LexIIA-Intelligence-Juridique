@@ -49,49 +49,27 @@ export const HeroVideoStage: React.FC<HeroVideoStageProps> = ({ demoUrl }) => {
   };
 
   return (
-    <section className="relative w-full h-[100dvh] min-h-[580px] overflow-hidden flex flex-col justify-between bg-black text-white select-none">
+    <section className="hero-stage relative w-full overflow-hidden flex flex-col justify-between bg-[#050a18] text-white select-none">
       {/* =====================================================================
-          1. VIDÉO PLEIN BORD-À-BORD (Couvre les angles gauche et droite à 100%)
+          FOND AMBIANT DOUX SUR MOBILE / PORTRAIT (sans bandes noires rigides)
       ===================================================================== */}
-      <div
-        onClick={togglePlay}
-        className="absolute inset-0 w-full h-full overflow-hidden z-0 cursor-pointer"
-        title={isPlaying ? 'Cliquer pour mettre en pause' : 'Cliquer pour reprendre'}
-      >
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
         <video
-          ref={videoRef}
           src="/assets/aistudio/LexIIA_presentation_v2__1__4936769a.mp4"
           autoPlay
           loop
           muted
           playsInline
-          className="w-full h-full object-cover object-center"
+          aria-hidden="true"
+          className="w-full h-full object-cover scale-125 blur-3xl opacity-45 transform-gpu"
         />
-
-        {/* Dégradés supérieurs et inférieurs légers pour garantir la lisibilité des boutons */}
-        <div className="absolute inset-x-0 top-0 h-28 sm:h-36 bg-gradient-to-b from-black/80 via-black/30 to-transparent pointer-events-none" />
-        <div className="absolute inset-x-0 bottom-0 h-32 sm:h-44 bg-gradient-to-t from-black/85 via-black/35 to-transparent pointer-events-none" />
-
-        {/* Indicateur de pause / reprise élégant au clic */}
-        <div
-          className={`absolute inset-0 flex items-center justify-center pointer-events-none transition-opacity duration-300 ${
-            isInteracting ? 'opacity-100 scale-100' : 'opacity-0 scale-90'
-          }`}
-        >
-          <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-black/75 backdrop-blur-md border border-white/30 flex items-center justify-center text-white shadow-2xl">
-            {isPlaying ? (
-              <Pause className="w-7 h-7 sm:w-9 sm:h-9" />
-            ) : (
-              <Play className="w-7 h-7 sm:w-9 sm:h-9 ml-1 text-emerald-400" />
-            )}
-          </div>
-        </div>
+        <div className="absolute inset-0 bg-[#050a18]/65" />
       </div>
 
       {/* =====================================================================
-          2. NAVIGATION SUPÉRIEURE TRANSPARENTE
+          1. NAVIGATION SUPÉRIEURE TRANSPARENTE
       ===================================================================== */}
-      <header className="relative z-30 w-full px-4 sm:px-8 pt-4 sm:pt-6 flex items-center justify-between gap-4">
+      <header className="hero-header relative z-30 w-full px-4 sm:px-8 flex items-center justify-between gap-4">
         {/* Liens de gauche pour grand écran */}
         <nav className="hidden lg:flex items-center gap-6 xl:gap-8 text-sm font-medium text-white/90">
           <a
@@ -232,13 +210,48 @@ export const HeroVideoStage: React.FC<HeroVideoStageProps> = ({ demoUrl }) => {
         </div>
       )}
 
-      {/* Spacer pour équilibrer la distribution verticale */}
-      <div className="flex-1" />
+      {/* =====================================================================
+          2. VIDÉO PRINCIPALE (Dézoomée 16:9 bord-à-bord sur mobile, plein écran sur ordinateur)
+      ===================================================================== */}
+      <div
+        onClick={togglePlay}
+        className="hero-video-wrapper overflow-hidden cursor-pointer bg-[#050a18]/60 shadow-2xl"
+        title={isPlaying ? 'Cliquer pour mettre en pause' : 'Cliquer pour reprendre'}
+      >
+        <video
+          ref={videoRef}
+          src="/assets/aistudio/LexIIA_presentation_v2__1__4936769a.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="hero-video-element"
+        />
+
+        {/* Dégradés supérieurs et inférieurs discrets pour les contrôles en mode plein écran */}
+        <div className="hero-gradient-top absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-black/75 via-black/25 to-transparent pointer-events-none" />
+        <div className="hero-gradient-bottom absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black/80 via-black/30 to-transparent pointer-events-none" />
+
+        {/* Indicateur de pause / reprise élégant au clic */}
+        <div
+          className={`absolute inset-0 flex items-center justify-center pointer-events-none transition-opacity duration-300 ${
+            isInteracting ? 'opacity-100 scale-100' : 'opacity-0 scale-90'
+          }`}
+        >
+          <div className="w-14 h-14 sm:w-20 sm:h-20 rounded-full bg-black/75 backdrop-blur-md border border-white/30 flex items-center justify-center text-white shadow-2xl">
+            {isPlaying ? (
+              <Pause className="w-6 h-6 sm:w-9 sm:h-9" />
+            ) : (
+              <Play className="w-6 h-6 sm:w-9 sm:h-9 ml-1 text-emerald-400" />
+            )}
+          </div>
+        </div>
+      </div>
 
       {/* =====================================================================
           3. BAS D'ÉCRAN : BOUTON PRINCIPAL & INDICATION DE DÉFILEMENT
       ===================================================================== */}
-      <div className="relative z-30 w-full max-w-6xl mx-auto px-4 sm:px-6 pb-6 sm:pb-8 flex flex-col items-center justify-center text-center gap-3">
+      <div className="hero-cta-bar relative z-30 w-full max-w-6xl mx-auto px-4 sm:px-6 flex flex-col items-center justify-center text-center gap-3">
         <a
           href={demoUrl}
           className="inline-flex items-center gap-2.5 px-7 sm:px-9 py-3.5 sm:py-4 rounded-full text-sm sm:text-base font-bold bg-[#059669] hover:bg-[#10b981] text-white shadow-2xl shadow-emerald-500/30 transition-all transform hover:scale-105 active:scale-95 whitespace-nowrap cursor-pointer border border-emerald-400/40"
@@ -252,7 +265,7 @@ export const HeroVideoStage: React.FC<HeroVideoStageProps> = ({ demoUrl }) => {
         {/* Indicateur de scroll discret invitant à explorer la suite */}
         <a
           href="#workflow"
-          className="inline-flex items-center gap-1.5 text-[11px] sm:text-xs font-medium text-white/70 hover:text-white transition pt-1 cursor-pointer"
+          className="inline-flex items-center gap-1.5 text-[11px] sm:text-xs font-medium text-white/75 hover:text-white transition pt-0.5 cursor-pointer"
         >
           <span>Découvrir la suite</span>
           <ChevronDown className="w-3.5 h-3.5 animate-bounce text-emerald-400" />

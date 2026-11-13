@@ -73,3 +73,78 @@
     inset 0 -1px 3px rgba(148, 163, 184, 0.3);
   border: 1px solid rgba(255, 255, 255, 0.85);
 }
+
+/* Responsive Hero Video Stage:
+   - Mobile & Portrait (including portrait tablets): uncropped edge-to-edge 16:9 video so all UI info remains visible
+   - Desktop Landscape: full-viewport 100dvh edge-to-edge cover */
+.hero-stage {
+  min-height: auto;
+}
+
+.hero-header {
+  padding-top: 1rem;
+  padding-bottom: 0.75rem;
+}
+
+.hero-video-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  max-height: calc(100dvh - 140px);
+  z-index: 10;
+}
+
+.hero-video-element {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
+.hero-gradient-top,
+.hero-gradient-bottom {
+  display: none;
+}
+
+.hero-cta-bar {
+  padding-top: 1.25rem;
+  padding-bottom: 1.75rem;
+}
+
+@media (min-width: 900px) and (min-aspect-ratio: 6 / 5) {
+  .hero-stage {
+    height: 100dvh;
+    min-height: 580px;
+  }
+
+  .hero-header {
+    padding-top: 1.5rem;
+    padding-bottom: 0;
+  }
+
+  .hero-video-wrapper {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: auto;
+    max-height: none;
+    z-index: 0;
+  }
+
+  .hero-video-element {
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .hero-gradient-top,
+  .hero-gradient-bottom {
+    display: block;
+  }
+
+  .hero-cta-bar {
+    padding-top: 0;
+    padding-bottom: 2rem;
+  }
+}
+
